@@ -11,7 +11,7 @@
         }
           
         #timer {
-            color: #eeeeee;
+            color: #FFFDF1; /* 💡 전체 텍스트(days, hours 등)를 숫자가 같은 밝은 톤으로 통일했습니다. */
             text-align: center;
             text-transform: uppercase;
             font-family: 'Lato', sans-serif;
@@ -38,7 +38,7 @@
             text-align: center;
         }
 
-        /* 장식용 스타일 */
+        /* 장식용 오브젝트 */
         .white {
             position: absolute;
             background: #eeeeee;
@@ -85,44 +85,24 @@
 </div>
 
 <script>
-    // 1. 목표 날짜 설정 (2028년 2월 12일 00시 00분 00초)
-    const targetDate = new Date('2028-02-12T00:00:00').getTime();
+const myDate = new Date('Feb 12, 2028 00:00:00').getTime();
 
-    function updateTimer() {
-        // 2. '현재 시간'을 매 초마다 새롭게 가져옴
-        const now = new Date().getTime();
+// countdown (부드러운 출력을 위해 1초(1000ms) 주기로 변경하는 것을 권장합니다)
+let timer = setInterval(function() {
 
-        // 3. 두 시간의 차이 계산
-        const diff = targetDate - now;
+    const today = new Date().getTime();
+    const diff = myDate - today;
 
-        // 만약 목표 날짜가 지났다면 타이머 멈춤
-        if (diff <= 0) {
-            clearInterval(timerInterval);
-            document.getElementById("days").innerHTML = "0";
-            document.getElementById("hours").innerHTML = "0";
-            document.getElementById("minutes").innerHTML = "0";
-            document.getElementById("seconds").innerHTML = "0";
-            return;
-        }
+    let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    let minutes = Math.floor((diff / (1000 * 60)) % 60);
+    let seconds = Math.floor((diff / 1000) % 60);
 
-        // 4. 남은 일, 시, 분, 초 수학 계산
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    document.getElementById("days").innerHTML = days;
+    document.getElementById("hours").innerHTML = hours;
+    document.getElementById("minutes").innerHTML = minutes;
+    document.getElementById("seconds").innerHTML = seconds;
 
-        // 5. 화면에 밀어넣기
-        document.getElementById("days").innerHTML = days;
-        document.getElementById("hours").innerHTML = hours;
-        document.getElementById("minutes").innerHTML = minutes;
-        document.getElementById("seconds").innerHTML = seconds;
-    }
-
-    // 처음 켰을 때 1초 딜레이 없이 바로 보여주기 위해 한 번 실행
-    updateTimer();
-
-    // 1초(1000ms)마다 주기적으로 실행
-    const timerInterval = setInterval(updateTimer, 1000);
+}, 1000); // 💡 1에서 1000으로 변경 (실시간으로 1초씩 줄어드는 것을 확인할 수 있습니다)
 </script>
-</body>
 </html>
