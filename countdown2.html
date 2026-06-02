@@ -26,33 +26,22 @@
             border-radius: 5px;
         }
 
-        .days {
-            background: #EF2F3C;
-        }
-
-        .hours {
-            background: #eeeeee;
-            color: #183059;
-        }
-
-        .minutes {
-            background: #276FBF;
-        }
-
-        .seconds {
-            background: #F0A202;
-        }
+        .days { background: #00462A; }
+        .hours { background: #00462A; }
+        .minutes { background: #00462A; }
+        .seconds { background: #00462A; }
 
         .numbers {
             font-family: 'Montserrat', sans-serif;
-            color:  #183059;
+            color: #FFFDF1;
             font-size: 4em;
             text-align: center;
         }
 
+        /* 장식용 스타일 */
         .white {
             position: absolute;
-            background:  #eeeeee;
+            background: #eeeeee;
             height: 85px;
             width: 75px;
             left: 30%;
@@ -61,7 +50,7 @@
 
         .red {
             position: absolute;
-            background:  #EF2F3C;
+            background: #EF2F3C;
             left: 18%;
             top: 9%;
             height: 65px;
@@ -70,7 +59,7 @@
 
         .blue {
             position: absolute;
-            background:  #276FBF;
+            background: #276FBF;
             height: 80px;
             width: 80px;
             left: 60%;
@@ -80,61 +69,60 @@
 </head>
 <body>
     
-    <div id="timer">
-        <div class="days"> 
-            <div id="days" class="numbers"></div>days
-        </div> 
-        <div class="hours"> 
-            <div id="hours" class="numbers"></div>hours
-        </div> 
-        <div class="minutes"> 
-            <div id="minutes" class="numbers"></div>minutes
-        </div> 
-        <div class="seconds"> 
-            <div id="seconds" class="numbers"></div>seconds
-        </div> 
-    </div>
+<div id="timer">
+    <div class="days"> 
+        <div id="days" class="numbers"></div>days
+    </div> 
+    <div class="hours"> 
+        <div id="hours" class="numbers"></div>hours
+    </div> 
+    <div class="minutes"> 
+        <div id="minutes" class="numbers"></div>minutes
+    </div> 
+    <div class="seconds"> 
+        <div id="seconds" class="numbers"></div>seconds
+    </div> 
+</div>
 
-</body>
 <script>
-    // 1. 디데이 목표 날짜 설정 (2028년 2월 12일 00시 00분 00초)
-    const myDate = new Date('Feb 12, 2028 00:00:00');
+    // 1. 목표 날짜 설정 (2028년 2월 12일 00시 00분 00초)
+    const targetDate = new Date('2028-02-12T00:00:00').getTime();
 
-    // 카운트다운 함수
-    function updateCountdown() {
-        // 현재 시간 가져오기
-        const today = new Date().getTime();
+    function updateTimer() {
+        // 2. '현재 시간'을 매 초마다 새롭게 가져옴
+        const now = new Date().getTime();
 
-        // 남은 시간 계산 (밀리초 단위)
-        const diff = myDate - today;
+        // 3. 두 시간의 차이 계산
+        const diff = targetDate - now;
 
-        // 만약 디데이에 도달하거나 지나갔을 때 처리 (음수 방지)
+        // 만약 목표 날짜가 지났다면 타이머 멈춤
         if (diff <= 0) {
-            clearInterval(timer);
-            document.getElementById("days").innerHTML = 0;
-            document.getElementById("hours").innerHTML = 0;
-            document.getElementById("minutes").innerHTML = 0;
-            document.getElementById("seconds").innerHTML = 0;
+            clearInterval(timerInterval);
+            document.getElementById("days").innerHTML = "0";
+            document.getElementById("hours").innerHTML = "0";
+            document.getElementById("minutes").innerHTML = "0";
+            document.getElementById("seconds").innerHTML = "0";
             return;
         }
 
-        // 시간 수학 계산
-        let days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        let seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        // 4. 남은 일, 시, 분, 초 수학 계산
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-        // 화면에 표시
+        // 5. 화면에 밀어넣기
         document.getElementById("days").innerHTML = days;
         document.getElementById("hours").innerHTML = hours;
         document.getElementById("minutes").innerHTML = minutes;
         document.getElementById("seconds").innerHTML = seconds;
     }
 
-    // 2. 페이지가 로드되자마자 한 번 실행 (처음 1초간 빈칸으로 뜨는 것 방지)
-    updateCountdown();
+    // 처음 켰을 때 1초 딜레이 없이 바로 보여주기 위해 한 번 실행
+    updateTimer();
 
-    // 3. 1초(1000ms)마다 함수 실행
-    let timer = setInterval(updateCountdown, 1000);
+    // 1초(1000ms)마다 주기적으로 실행
+    const timerInterval = setInterval(updateTimer, 1000);
 </script>
+</body>
 </html>
